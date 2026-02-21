@@ -1,66 +1,125 @@
-# mi-primer-quarkus
+# Mi Primer Quarkus
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Proyecto de ejemplo construido con **Quarkus** - El framework Java supersonico y subatomico.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Descripcion
 
-## Running the application in dev mode
+Este proyecto es una API RESTful construida con Quarkus que permite gestionar productos y tareas. Utiliza:
+- **Quarkus 3.31.4**
+- **Java 21**
+- **PostgreSQL** como base de datos
+- **Hibernate ORM with Panache** para la persistencia
 
-You can run your application in dev mode that enables live coding using:
+## Estructura del Proyecto
 
-```shell script
+```
+src/
+├── main/
+│   ├── java/com/david/
+│   │   ├── entity/          # Entidades de base de datos
+│   │   │   ├── Producto.java
+│   │   │   └── Tarea.java
+│   │   ├── resource/       # Endpoints REST
+│   │   │   ├── ProductoResource.java
+│   │   │   └── TareaResource.java
+│   │   ├── service/       # Logica de negocio
+│   │   │   └── TareaService.java
+│   │   ├── dto/           # Objetos de transferencia de datos
+│   │   │   ├── ProductoDTO.java
+│   │   │   └── TareaDTO.java
+│   │   └── exception/     # Manejo de errores
+│   │       └── GlobalExceptionMapper.java
+│   └── resources/
+│       ├── application.properties
+│       └── import.sql
+└── test/
+    └── java/com/david/
+        ├── ProductoResourceTest.java
+        └── TareaResourceTest.java
+```
+
+## Entidades
+
+### Producto
+| Campo | Tipo | Descripcion |
+|-------|------|-------------|
+| id | Long | Identificador unico |
+| nombre | String | Nombre del producto |
+| precio | Double | Precio del producto |
+| stock | Integer | Cantidad en stock |
+
+### Tarea
+| Campo | Tipo | Descripcion |
+|-------|------|-------------|
+| id | Long | Identificador unico |
+| titulo | String | Titulo de la tarea |
+| descripcion | String | Descripcion detallada |
+| terminada | Boolean | Estado de la tarea |
+
+## Endpoints REST
+
+### Productos
+| Metodo | Endpoint | Descripcion |
+|--------|----------|-------------|
+| GET | /productos | Listar todos los productos |
+| POST | /productos | Crear un nuevo producto |
+
+### Tareas
+| Metodo | Endpoint | Descripcion |
+|--------|----------|-------------|
+| GET | /tareas | Listar todas las tareas |
+| POST | /tareas | Crear una nueva tarea |
+
+## Configuracion
+
+La configuracion se encuentra en `src/main/resources/application.properties`:
+
+```properties
+# Database
+quarkus.datasource.db-kind=postgresql
+quarkus.hibernate-orm.database.generation=update
+quarkus.datasource.devservices.port=5432
+
+# OpenAPI/Swagger
+quarkus.smallrye-openapi.path=/swagger-ui
+quarkus.swagger-ui.always-include=true
+```
+
+## Como Ejecutar
+
+### Desarrollo
+```bash
 ./mvnw quarkus:dev
 ```
+Accede a la Dev UI en: http://localhost:8080/q/dev/
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
-
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
+### Produccion
+```bash
 ./mvnw package
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+### Docker Compose
+```bash
+docker-compose up -d
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+## Pruebas
 
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
+Ejecutar todos los tests:
+```bash
+./mvnw test
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+Ejecutar un test especifico:
+```bash
+./mvnw test -Dtest=ProductoResourceTest
 ```
 
-You can then execute your native executable with: `./target/mi-primer-quarkus-1.0.0-SNAPSHOT-runner`
+## Documentacion API
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+Swagger UI esta disponible en: http://localhost:8080/swagger-ui
 
-## Related Guides
+## Licencia
 
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+MIT

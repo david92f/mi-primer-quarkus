@@ -1,7 +1,9 @@
 package com.david.resource;
 
+import com.david.dto.ProductoDTO;
 import com.david.entity.Producto;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
@@ -18,7 +20,11 @@ public class ProductoResource {
     
     @POST
     @Transactional
-    public Producto crear(Producto producto) {
+    public Producto crear(@Valid ProductoDTO productoDTO) {
+        Producto producto = new Producto();
+        producto.nombre = productoDTO.nombre;
+        producto.precio = productoDTO.precio;
+        producto.stock = productoDTO.stock;
         producto.persist();
         return producto;
     }
