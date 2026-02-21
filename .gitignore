@@ -68,3 +68,6 @@ surefire-reports/
 # Temporary files
 tmp/
 temp/
+
+# OpenCode skills (local)
+.opencode/skills/
