@@ -118,7 +118,7 @@ Ejecutar un test especifico:
 
 ## Documentacion API
 
-Swagger UI esta disponible en: http://localhost:8080/swagger-ui
+Swagger UI esta disponible en: http://localhost:8080/q/swagger-ui/
 
 ## Licencia
 

@@ -1,0 +1,6 @@
+{
+  "project_name": "mi-primer-quarkus",
+  "tech_stack": ["Java 17", "Quarkus", "Maven", "Kafka"],
+  "rules": ["Clean Code", "Hexagonal Architecture"],
+  "skills_path": "./.opencode/skills"
+}
