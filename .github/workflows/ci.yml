@@ -25,7 +25,7 @@ jobs:
         run: ./mvnw -B package -DskipTests
 
       - name: Run tests
-        run: ./mvnw -B test
+        run: ./mvnw -B clean test
 
       - name: Verify
         run: ./mvnw -B verify
