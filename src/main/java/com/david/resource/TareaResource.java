@@ -2,7 +2,8 @@ package com.david.resource;
 
 import com.david.dto.TareaDTO;
 import com.david.entity.Tarea;
-import jakarta.transaction.Transactional;
+import com.david.service.TareaService;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -18,21 +19,17 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class TareaResource {
 
+    @Inject
+    TareaService tareaService;
+
     @GET
     public List<Tarea> getAllTareas() {
-        return Tarea.listAll();
+        return tareaService.listAll();
     }
 
     @POST
-    @Transactional
     public Response createTarea(@Valid TareaDTO tareaDTO) {
-        Tarea tarea = new Tarea();
-        tarea.titulo = tareaDTO.titulo;
-        tarea.descripcion = tareaDTO.descripcion;
-        tarea.terminada = tareaDTO.terminada != null ? tareaDTO.terminada : false;
-        
-        tarea.persist();
-        
+        Tarea tarea = tareaService.create(tareaDTO);
         return Response.status(Response.Status.CREATED).entity(tarea).build();
     }
 }
