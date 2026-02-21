@@ -40,8 +40,8 @@ class ProductoResourceIntegrationTest {
             .get("/productos")
             .then()
             .statusCode(200)
-            .body("size()", greaterThan(0))
-            .body("find { it.id == " + productoId + " }.nombre", is("Producto Integracion"));
+            .body("content.size()", greaterThan(0))
+            .body("content.find { it.id == " + productoId + " }.nombre", is("Producto Integracion"));
 
         given()
             .when()

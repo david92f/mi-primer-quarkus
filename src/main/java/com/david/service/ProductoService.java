@@ -2,6 +2,8 @@ package com.david.service;
 
 import com.david.dto.ProductoDTO;
 import com.david.entity.Producto;
+import io.quarkus.panache.common.Page;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
@@ -15,6 +17,33 @@ public class ProductoService {
     public List<Producto> listAll() {
         LOG.debug("Listando todos los productos");
         return Producto.listAll();
+    }
+
+    public List<Producto> findAll(int page, int size, String sortBy, boolean descending, String search) {
+        LOG.debugf("Listando productos - page: %d, size: %d, sort: %s, search: %s", page, size, sortBy, search);
+        
+        Sort sort = descending ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        
+        String searchFilter = search != null && !search.isBlank() 
+            ? "nombre like ?1" 
+            : null;
+        
+        List<Producto> productos = search != null && !search.isBlank()
+            ? Producto.find(searchFilter, sort, "%" + search + "%").page(Page.of(page, size)).list()
+            : Producto.findAll(sort).page(Page.of(page, size)).list();
+        
+        LOG.debugf("Encontrados %d productos", productos.size());
+        return productos;
+    }
+
+    public long count(String search) {
+        String searchFilter = search != null && !search.isBlank() 
+            ? "nombre like ?1" 
+            : null;
+        
+        return search != null && !search.isBlank()
+            ? Producto.count(searchFilter, "%" + search + "%")
+            : Producto.count();
     }
 
     @Transactional
