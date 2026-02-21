@@ -7,10 +7,13 @@ import com.david.service.ProductoService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -80,5 +83,59 @@ public class ProductoResource {
         Producto producto = productoService.create(productoDTO);
         LOG.infof("POST /productos - Created producto with ID: %d", producto.id);
         return Response.status(Response.Status.CREATED).entity(producto).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Operation(summary = "Actualizar producto", description = "Actualiza completamente un producto existente")
+    @APIResponse(responseCode = "200", description = "Producto actualizado")
+    @APIResponse(responseCode = "400", description = "Datos de producto inválidos")
+    @APIResponse(responseCode = "404", description = "Producto no encontrado")
+    public Response updateProducto(
+            @Parameter(description = "ID del producto", required = true) @PathParam("id") Long id,
+            @Valid ProductoDTO productoDTO) {
+        LOG.infof("PUT /productos/%d - Request received", id);
+        Producto producto = productoService.update(id, productoDTO);
+        if (producto == null) {
+            LOG.warnf("Producto no encontrado con ID: %d", id);
+            throw new NotFoundException("Producto no encontrado");
+        }
+        LOG.infof("PUT /productos/%d - Updated successfully", id);
+        return Response.ok(producto).build();
+    }
+
+    @PATCH
+    @Path("/{id}")
+    @Operation(summary = "Actualizar producto parcialmente", description = "Actualiza parcialmente un producto existente")
+    @APIResponse(responseCode = "200", description = "Producto actualizado")
+    @APIResponse(responseCode = "400", description = "Datos de producto inválidos")
+    @APIResponse(responseCode = "404", description = "Producto no encontrado")
+    public Response patchProducto(
+            @Parameter(description = "ID del producto", required = true) @PathParam("id") Long id,
+            ProductoDTO productoDTO) {
+        LOG.infof("PATCH /productos/%d - Request received", id);
+        Producto producto = productoService.patch(id, productoDTO);
+        if (producto == null) {
+            LOG.warnf("Producto no encontrado con ID: %d", id);
+            throw new NotFoundException("Producto no encontrado");
+        }
+        LOG.infof("PATCH /productos/%d - Patched successfully", id);
+        return Response.ok(producto).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Operation(summary = "Eliminar producto", description = "Elimina un producto por su ID")
+    @APIResponse(responseCode = "204", description = "Producto eliminado exitosamente")
+    @APIResponse(responseCode = "404", description = "Producto no encontrado")
+    public Response deleteProducto(@Parameter(description = "ID del producto", required = true) @PathParam("id") Long id) {
+        LOG.infof("DELETE /productos/%d - Request received", id);
+        boolean deleted = productoService.delete(id);
+        if (!deleted) {
+            LOG.warnf("Producto no encontrado con ID: %d", id);
+            throw new NotFoundException("Producto no encontrado");
+        }
+        LOG.infof("DELETE /productos/%d - Deleted successfully", id);
+        return Response.noContent().build();
     }
 }

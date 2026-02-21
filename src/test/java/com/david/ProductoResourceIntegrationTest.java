@@ -36,6 +36,7 @@ class ProductoResourceIntegrationTest {
             .path("id");
 
         given()
+            .queryParam("size", 100)
             .when()
             .get("/productos")
             .then()

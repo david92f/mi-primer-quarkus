@@ -183,4 +183,204 @@ class ProductoResourceTest {
             .then()
             .statusCode(400);
     }
+
+    // ======== TESTS PUT ========
+    
+    @Test
+    void testUpdateProducto() {
+        String createJson = """
+            {
+                "nombre": "Producto a actualizar",
+                "precio": 50.0,
+                "stock": 10
+            }
+            """;
+        
+        Integer productoId = given()
+            .contentType("application/json")
+            .body(createJson)
+            .when().post("/productos")
+            .then()
+            .statusCode(201)
+            .extract().path("id");
+        
+        String updateJson = """
+            {
+                "nombre": "Producto actualizado",
+                "precio": 150.0,
+                "stock": 25
+            }
+            """;
+        
+        given()
+            .contentType("application/json")
+            .body(updateJson)
+            .when().put("/productos/" + productoId)
+            .then()
+            .statusCode(200)
+            .body("nombre", is("Producto actualizado"))
+            .body("precio", is(150.0f))
+            .body("stock", is(25));
+    }
+
+    @Test
+    void testUpdateProductoNoEncontrado() {
+        String json = """
+            {
+                "nombre": "Producto no existe",
+                "precio": 100.0,
+                "stock": 5
+            }
+            """;
+        
+        given()
+            .contentType("application/json")
+            .body(json)
+            .when().put("/productos/99999")
+            .then()
+            .statusCode(404);
+    }
+
+    @Test
+    void testUpdateProductoInvalid() {
+        String json = """
+            {
+                "nombre": "",
+                "precio": -10.0,
+                "stock": 5
+            }
+            """;
+        
+        given()
+            .contentType("application/json")
+            .body(json)
+            .when().put("/productos/1")
+            .then()
+            .statusCode(400);
+    }
+
+    // ======== TESTS PATCH ========
+    
+    @Test
+    void testPatchProducto() {
+        String createJson = """
+            {
+                "nombre": "Producto patch",
+                "precio": 50.0,
+                "stock": 10
+            }
+            """;
+        
+        Integer productoId = given()
+            .contentType("application/json")
+            .body(createJson)
+            .when().post("/productos")
+            .then()
+            .statusCode(201)
+            .extract().path("id");
+        
+        String patchJson = """
+            {
+                "nombre": "Producto parchado"
+            }
+            """;
+        
+        given()
+            .contentType("application/json")
+            .body(patchJson)
+            .when().patch("/productos/" + productoId)
+            .then()
+            .statusCode(200)
+            .body("nombre", is("Producto parchado"))
+            .body("precio", is(50.0f));
+    }
+
+    @Test
+    void testPatchProductoParcial() {
+        String createJson = """
+            {
+                "nombre": "Producto parcial",
+                "precio": 100.0,
+                "stock": 20
+            }
+            """;
+        
+        Integer productoId = given()
+            .contentType("application/json")
+            .body(createJson)
+            .when().post("/productos")
+            .then()
+            .statusCode(201)
+            .extract().path("id");
+        
+        String patchJson = """
+            {
+                "stock": 50
+            }
+            """;
+        
+        given()
+            .contentType("application/json")
+            .body(patchJson)
+            .when().patch("/productos/" + productoId)
+            .then()
+            .statusCode(200)
+            .body("stock", is(50))
+            .body("precio", is(100.0f));
+    }
+
+    @Test
+    void testPatchProductoNoEncontrado() {
+        String json = """
+            {
+                "nombre": "No existe"
+            }
+            """;
+        
+        given()
+            .contentType("application/json")
+            .body(json)
+            .when().patch("/productos/99999")
+            .then()
+            .statusCode(404);
+    }
+
+    // ======== TESTS DELETE ========
+    
+    @Test
+    void testDeleteProducto() {
+        String createJson = """
+            {
+                "nombre": "Producto a eliminar",
+                "precio": 50.0,
+                "stock": 10
+            }
+            """;
+        
+        Integer productoId = given()
+            .contentType("application/json")
+            .body(createJson)
+            .when().post("/productos")
+            .then()
+            .statusCode(201)
+            .extract().path("id");
+        
+        given()
+            .when().delete("/productos/" + productoId)
+            .then()
+            .statusCode(204);
+        
+        given()
+            .when().get("/productos/" + productoId)
+            .then()
+            .statusCode(404);
+    }
+
+    @Test
+    void testDeleteProductoNoEncontrado() {
+        given()
+            .when().delete("/productos/99999")
+            .then()
+            .statusCode(404);
+    }
 }

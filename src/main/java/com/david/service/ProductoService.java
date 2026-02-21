@@ -66,4 +66,55 @@ public class ProductoService {
         LOG.debugf("Buscando producto por ID: %d", id);
         return Producto.findById(id);
     }
+
+    @Transactional
+    public Producto update(Long id, ProductoDTO dto) {
+        LOG.infof("Actualizando producto ID: %d", id);
+        Producto producto = Producto.findById(id);
+        if (producto == null) {
+            LOG.warnf("Producto no encontrado con ID: %d", id);
+            return null;
+        }
+        producto.nombre = dto.nombre;
+        producto.precio = dto.precio;
+        producto.stock = dto.stock;
+        producto.persist();
+        LOG.infof("Producto actualizado: %s", producto.nombre);
+        return producto;
+    }
+
+    @Transactional
+    public Producto patch(Long id, ProductoDTO dto) {
+        LOG.infof("Parcheando producto ID: %d", id);
+        Producto producto = Producto.findById(id);
+        if (producto == null) {
+            LOG.warnf("Producto no encontrado con ID: %d", id);
+            return null;
+        }
+        if (dto.nombre != null) {
+            producto.nombre = dto.nombre;
+        }
+        if (dto.precio != null) {
+            producto.precio = dto.precio;
+        }
+        if (dto.stock != null) {
+            producto.stock = dto.stock;
+        }
+        producto.persist();
+        LOG.infof("Producto parchado: %s", producto.nombre);
+        return producto;
+    }
+
+    @Transactional
+    public boolean delete(Long id) {
+        LOG.infof("Eliminando producto ID: %d", id);
+        Producto producto = Producto.findById(id);
+        if (producto == null) {
+            LOG.warnf("Producto no encontrado con ID: %d", id);
+            return false;
+        }
+        producto.delete();
+        LOG.infof("Producto eliminado: %d", id);
+        return true;
+    }
 }
