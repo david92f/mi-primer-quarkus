@@ -24,6 +24,9 @@ public class TareaService {
     }
 
     public Tarea findById(Long id) {
+        if (id == null) {
+            return null;
+        }
         return Tarea.findById(id);
     }
 

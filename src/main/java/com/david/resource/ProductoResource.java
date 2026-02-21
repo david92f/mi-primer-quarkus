@@ -7,8 +7,10 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -23,12 +25,22 @@ public class ProductoResource {
     ProductoService productoService;
 
     @GET
-    public List<Producto> listarTodos() {
+    public List<Producto> getAllProductos() {
         return productoService.listAll();
     }
 
+    @GET
+    @Path("/{id}")
+    public Producto getProductoById(@PathParam("id") Long id) {
+        Producto producto = productoService.findById(id);
+        if (producto == null) {
+            throw new NotFoundException("Producto no encontrado");
+        }
+        return producto;
+    }
+
     @POST
-    public Response crear(@Valid ProductoDTO productoDTO) {
+    public Response createProducto(@Valid ProductoDTO productoDTO) {
         Producto producto = productoService.create(productoDTO);
         return Response.status(Response.Status.CREATED).entity(producto).build();
     }

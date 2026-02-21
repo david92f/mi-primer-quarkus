@@ -62,6 +62,7 @@ src/
 | Metodo | Endpoint | Descripcion |
 |--------|----------|-------------|
 | GET | /productos | Listar todos los productos |
+| GET | /productos/{id} | Obtener producto por ID |
 | POST | /productos | Crear un nuevo producto |
 
 ### Tareas
@@ -111,9 +112,14 @@ Ejecutar todos los tests:
 ./mvnw test
 ```
 
-Ejecutar un test especifico:
+Ejecutar test de unidad:
 ```bash
 ./mvnw test -Dtest=ProductoResourceTest
+```
+
+Ejecutar test de integracion:
+```bash
+./mvnw test -Dtest=ProductoResourceIntegrationTest
 ```
 
 ## Documentacion API

@@ -24,6 +24,9 @@ public class ProductoService {
     }
 
     public Producto findById(Long id) {
+        if (id == null) {
+            return null;
+        }
         return Producto.findById(id);
     }
 
