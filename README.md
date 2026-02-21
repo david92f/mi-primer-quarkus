@@ -22,7 +22,8 @@ src/
 │   │   ├── resource/       # Endpoints REST
 │   │   │   ├── ProductoResource.java
 │   │   │   └── TareaResource.java
-│   │   ├── service/       # Logica de negocio
+│   │   ├── service/           # Logica de negocio
+│   │   │   ├── ProductoService.java
 │   │   │   └── TareaService.java
 │   │   ├── dto/           # Objetos de transferencia de datos
 │   │   │   ├── ProductoDTO.java
@@ -30,8 +31,7 @@ src/
 │   │   └── exception/     # Manejo de errores
 │   │       └── GlobalExceptionMapper.java
 │   └── resources/
-│       ├── application.properties
-│       └── import.sql
+│       └── application.properties
 └── test/
     └── java/com/david/
         ├── ProductoResourceTest.java
