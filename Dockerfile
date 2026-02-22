@@ -16,6 +16,7 @@ RUN mvn package -DskipTests -B
 FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.24
 
 ENV LANGUAGE='en_US:en'
+ENV QUARKUS_PROFILE=prod
 
 # Copy built artifacts from builder
 COPY --from=builder /app/target/quarkus-app/lib/ /deployments/lib/
