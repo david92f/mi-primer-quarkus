@@ -101,4 +101,4 @@ jobs:
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway deploy --projectId precious-gentleness --service mi-primer-quarkus
+        run: railway link precious-gentleness && railway deploy
