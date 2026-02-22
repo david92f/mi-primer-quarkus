@@ -1,5 +1,7 @@
 package com.david;
 
+import com.david.testresources.PostgreSQLTestResource;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.greaterThan;
 
 @QuarkusTest
+@QuarkusTestResource(PostgreSQLTestResource.class)
 class ProductoResourceIntegrationTest {
 
     @Test

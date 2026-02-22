@@ -2,6 +2,8 @@ package com.david.service;
 
 import com.david.dto.ProductoDTO;
 import com.david.entity.Producto;
+import com.david.testresources.PostgreSQLTestResource;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -13,6 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
+@QuarkusTestResource(PostgreSQLTestResource.class)
 class ProductoServiceTest {
 
     @Inject

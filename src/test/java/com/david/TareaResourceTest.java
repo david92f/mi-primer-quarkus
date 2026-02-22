@@ -1,5 +1,7 @@
 package com.david;
 
+import com.david.testresources.PostgreSQLTestResource;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
@@ -7,6 +9,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 
 @QuarkusTest
+@QuarkusTestResource(PostgreSQLTestResource.class)
 class TareaResourceTest {
 
     @Test
